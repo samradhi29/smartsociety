@@ -9,16 +9,27 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "env": "^0.0.2",
+    "formidable": "^3.5.4",
+    "framer-motion": "^12.10.5",
+    "install": "^0.13.0",
+    "lucide-react": "^0.509.0",
+    "mongoose": "^8.14.2",
+    "multer": "^1.4.5-lts.2",
+    "next": "15.3.2",
+    "next-auth": "^4.24.11",
+    "npm": "^11.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "next": "15.3.2"
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4"
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }
