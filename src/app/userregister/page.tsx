@@ -1,5 +1,18 @@
 "use client";
+
 import { useEffect, useState, ChangeEvent, FormEvent } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  User,
+  Mail,
+  Phone,
+  Lock,
+  Building,
+  Home,
+  Calendar,
+} from "lucide-react";
 
 interface Flat {
   _id: string;
@@ -22,8 +35,9 @@ export default function RegisterResident() {
     gender: "Male",
     age: "",
     flatnumber: "",
-    society: "", // <-- new field
+    society: "",
     password: "",
+    role: "user",
   });
 
   const [flats, setFlats] = useState<Flat[]>([]);
@@ -56,7 +70,6 @@ export default function RegisterResident() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-
     if (!formData.flatnumber || !formData.society) {
       alert("Please select a flat and a society.");
       return;
@@ -78,47 +91,150 @@ export default function RegisterResident() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-800 via-black to-purple-900 px-4">
-      <form onSubmit={handleSubmit} className="bg-black/70 p-8 rounded-xl text-white w-full max-w-xl space-y-6 border border-purple-500">
-        <h2 className="text-2xl font-bold text-center">Register Resident</h2>
+    <div className="min-h-screen flex items-center justify-center bg-black px-4 py-12">
+      <Card className="bg-black/40 backdrop-blur-md border border-slate-500 text-white shadow-2xl w-full max-w-3xl shadow-cyan-600">
+        <CardContent className="p-8">
+          <h2 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-cyan-400 via-green-300 to-pink-300 bg-clip-text text-transparent">
+            Register Resident
+          </h2>
 
-        <input name="name" placeholder="Name" value={formData.name} onChange={handleChange} required className="w-full p-2 rounded bg-black/40 border border-purple-400" />
-        <input name="username" placeholder="Username" value={formData.username} onChange={handleChange} required className="w-full p-2 rounded bg-black/40 border border-purple-400" />
-        <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} required className="w-full p-2 rounded bg-black/40 border border-purple-400" />
-        <input name="phone" placeholder="Phone" value={formData.phone} onChange={handleChange} required className="w-full p-2 rounded bg-black/40 border border-purple-400" />
-        <select name="gender" value={formData.gender} onChange={handleChange} className="w-full p-2 rounded bg-black/40 border border-purple-400">
-          <option>Male</option>
-          <option>Female</option>
-          <option>Other</option>
-        </select>
-        <input name="age" type="number" placeholder="Age" value={formData.age} onChange={handleChange} required className="w-full p-2 rounded bg-black/40 border border-purple-400" />
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Row 1 */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="relative">
+                <User className="absolute left-3 top-3 w-4 h-4 text-white" />
+                <Input
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder="Name"
+                  required
+                  className="pl-10 bg-black text-white border border-neutral-600 focus:outline-none focus:ring-0 focus:bg-black"
+                />
+              </div>
+              <div className="relative">
+                <User className="absolute left-3 top-3 w-4 h-4 text-white" />
+                <Input
+                  name="username"
+                  value={formData.username}
+                  onChange={handleChange}
+                  placeholder="Username"
+                  required
+                  className="pl-10 bg-black text-white border border-neutral-600 focus:outline-none focus:ring-0 focus:bg-black"
+                />
+              </div>
+            </div>
 
-        {/* Society dropdown */}
-        <select name="society" value={formData.society} onChange={handleChange} required className="w-full p-2 rounded bg-black/40 border border-purple-400">
-          <option value="">Select Society</option>
-          {societies.map((soc) => (
-            <option key={soc._id} value={soc._id}>
-              {soc.name} - {soc.location}
-            </option>
-          ))}
-        </select>
+            {/* Row 2 */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="relative">
+                <Mail className="absolute left-3 top-3 w-4 h-4 text-white" />
+                <Input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="Email"
+                  required
+                  className="pl-10 bg-black text-white border border-neutral-600 focus:outline-none focus:ring-0 focus:bg-black"
+                />
+              </div>
+              <div className="relative">
+                <Phone className="absolute left-3 top-3 w-4 h-4 text-white" />
+                <Input
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  placeholder="Phone"
+                  required
+                  className="pl-10 bg-black text-white border border-neutral-600 focus:outline-none focus:ring-0 focus:bg-black"
+                />
+              </div>
+            </div>
 
-        {/* Flat dropdown */}
-        <select name="flatnumber" value={formData.flatnumber} onChange={handleChange} required className="w-full p-2 rounded bg-black/40 border border-purple-400">
-          <option value="">Select Flat</option>
-          {flats.map((flat) => (
-            <option key={flat._id} value={flat._id}>
-              {flat.flatnumber} - Block {flat.block}
-            </option>
-          ))}
-        </select>
+            {/* Row 3 */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <select
+                name="gender"
+                value={formData.gender}
+                onChange={handleChange}
+                className="w-full p-2 rounded bg-black text-white border border-neutral-600 focus:outline-none focus:ring-0 focus:bg-black"
+              >
+                <option>Male</option>
+                <option>Female</option>
+                <option>Other</option>
+              </select>
+              <div className="relative">
+                <Calendar className="absolute left-3 top-3 w-4 h-4 text-white" />
+                <Input
+                  name="age"
+                  type="number"
+                  value={formData.age}
+                  onChange={handleChange}
+                  placeholder="Age"
+                  required
+                  className="pl-10 bg-black text-white border border-neutral-600 focus:outline-none focus:ring-0 focus:bg-black"
+                />
+              </div>
+            </div>
 
-        <input name="password" type="password" placeholder="Password" value={formData.password} onChange={handleChange} required className="w-full p-2 rounded bg-black/40 border border-purple-400" />
+            {/* Row 4 */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <select
+                name="society"
+                value={formData.society}
+                onChange={handleChange}
+                required
+                className="w-full p-2 rounded bg-black text-white border border-neutral-600 focus:outline-none focus:ring-0 focus:bg-black"
+              >
+                <option value="">Select Society</option>
+                {societies.map((soc) => (
+                  <option key={soc._id} value={soc._id}>
+                    {soc.name} - {soc.location}
+                  </option>
+                ))}
+              </select>
 
-        <button type="submit" className="w-full py-2 bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 rounded-xl font-semibold">
-          Register
-        </button>
-      </form>
+              <select
+                name="flatnumber"
+                value={formData.flatnumber}
+                onChange={handleChange}
+                required
+                className="w-full p-2 rounded bg-black text-white border border-neutral-600 focus:outline-none focus:ring-0 focus:bg-black"
+              >
+                <option value="">Select Flat</option>
+                {flats.map((flat) => (
+                  <option key={flat._id} value={flat._id}>
+                    {flat.flatnumber} - Block {flat.block}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Password */}
+            <div className="relative">
+              <Lock className="absolute left-3 top-3 w-4 h-4 text-white" />
+              <Input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Password"
+                required
+                className="pl-10 bg-black text-white border border-neutral-600 focus:outline-none focus:ring-0 focus:bg-black"
+              />
+            </div>
+
+            {/* Submit */}
+            <Button
+              type="submit"
+              className="w-full py-2 mt-4 bg-black border-2 text-yellow-300 hover:from-blue-600 hover:to-purple-800 rounded-xl border-b-gray-950"
+            >
+              Register
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 }

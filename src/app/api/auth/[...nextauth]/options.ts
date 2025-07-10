@@ -1,3 +1,4 @@
+
 import { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
@@ -30,6 +31,8 @@ const authOptions: AuthOptions = {
           _id: user._id.toString(),
           username: user.username,
           email: user.email,
+          role : user.role,
+          society: user.society, 
         };
       },
     }),
@@ -42,6 +45,8 @@ const authOptions: AuthOptions = {
         session.user.username = token.username as string;
         session.user.email = token.email as string;
         session.user.society = token.society;
+        session.user.role=token.role as string;
+        // session.user.isAdmin = token.isAdmin as Boolean;
       }
       return session;
     },
@@ -52,6 +57,7 @@ const authOptions: AuthOptions = {
         token.username = user.username;
         token.email = user.email;
         token.society = user.society;
+        token.role = user.role;
       }
       return token;
     },
@@ -67,5 +73,4 @@ const authOptions: AuthOptions = {
 
   secret: process.env.NEXTAUTH_SECRET,
 };
-
 export default authOptions;

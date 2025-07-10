@@ -6,7 +6,7 @@ export async function POST(req:Request) {
     await dbconnect();
     try{
         
-          const {name , email , flatnumber , phone , gender , age , username , society , password} = await req.json();
+          const {name , email , flatnumber , phone , gender , age , username , society , password , role} = await req.json();
           if(!name || !email || !flatnumber || !username || !society){
             return NextResponse.json({message : "All fields are required"} , {status : 400});
             
@@ -18,7 +18,7 @@ export async function POST(req:Request) {
           }
           const hashedPassword = await bcrypt.hash(password, 10);
           const newuser = new ResidentModel({
-            name , email , flatnumber , phone , gender , age , username , society , password : hashedPassword
+            name , email , flatnumber , phone , gender , age , username , society , password : hashedPassword , role
           })
           await newuser.save();
           return NextResponse.json({

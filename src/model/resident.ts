@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document  , Types } from "mongoose";
 import {  Society } from "./Society";
-import { flats } from "./flats";
+import { flatsModel } from "./flats";
 export interface Resident extends Document {
   name: string;
   email: string;
@@ -11,6 +11,7 @@ export interface Resident extends Document {
   username : string;
   society : Types.ObjectId;
   password : string;
+  role : string;
 }
 
 const residentSchema: Schema<Resident> = new Schema({
@@ -19,8 +20,8 @@ const residentSchema: Schema<Resident> = new Schema({
     required: true,
     trim: true
   },
-  username :{
- type: String,
+  username: {
+    type: String,
     required: true,
   },
   email: {
@@ -28,7 +29,7 @@ const residentSchema: Schema<Resident> = new Schema({
     required: true,
     match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Enter a valid email address"]
   },
-   flatnumber: {
+  flatnumber: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "flats",
     required: true,
@@ -46,11 +47,22 @@ const residentSchema: Schema<Resident> = new Schema({
     type: Number,
     required: true
   },
-password :{
-  type : String , 
-  required : true
-}
+  password: {
+    type: String,
+    required: true
+  },
+  role: {
+    type: String,
+    enum: ["admin", "user"],
+    default: "user"
+  },
+  society: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "society",
+    required: true
+  }
 });
+
 
 export const ResidentModel =
   mongoose.models.Resident || mongoose.model<Resident>("Resident", residentSchema);

@@ -1,87 +1,86 @@
-"user client"
-import { div, li, p } from "framer-motion/client";
-import React , {useEffect , useState} from "react";
-type Member ={
-   name: string;
-     email: string;
-      
-     phone: string;
-     gender: string;
-     age: number;
-     username : string;
-    
-     password : string;
+"use client";
+import React, { useEffect, useState } from "react";
+
+type Member = {
+  name: string;
+  email: string;
+  phone: string;
+  gender: string;
+  age: number;
+  username: string;
+  password: string;
 };
-type flat ={
-      flatnumber : string;
-       block : string;
-       floor: number ;
-       type : string;
-       size : Number;
-       isoccupied : boolean;
-       Members : Member[];
-}
-export default function flatview(){
-const [flats , setflats] = useState<flat[]>([])
-const [selectedflat , setselectedflat] = useState<flat | null>(null);
-useEffect(()=>{
-    const fetchflats = async()=>{
-        try{
-const res = await fetch("/api/flatsdata");
-if(!res.ok){
-    throw new Error("failed to fetch");
-    const data : flat[] = await res.json();
-    setflats(data);
-}
-        }
-        catch(error){
-throw new Error("something is wrong!!");
-        }
-    }
-    fetchflats();
-}
- , []);
 
- return (
+type Flat = {
+  flatnumber: string;
+  block: string;
+  floor: number;
+  type: string;
+  size: number;
+  isoccupied: boolean;
+  Members: Member[];
+};
+
+export default function FlatView() {
+  const [flats, setFlats] = useState<Flat[]>([]);
+  const [selectedFlat, setSelectedFlat] = useState<Flat | null>(null);
+
+  useEffect(() => {
+    const fetchFlats = async () => {
+      try {
+        const res = await fetch("/api/flatview");
+        if (!res.ok) {
+          throw new Error("Failed to fetch");
+        }
+        const data: Flat[] = await res.json();
+        setFlats(data);
+      } catch (error) {
+        console.error("Something went wrong!!", error);
+      }
+    };
+    fetchFlats();
+  }, []);
+
+  return (
     <div>
+      <h1>Flats in your society</h1>
+      <div>
+        {flats.map((flat, index) => (
+          <div
+            key={index}
+            onClick={() => setSelectedFlat(flat)}
+            style={{
+              border: "1px solid gray",
+              padding: "10px",
+              margin: "10px",
+              cursor: "pointer",
+            }}
+          >
+            <h2>Flat {flat.flatnumber}</h2>
+            <p>Block: {flat.block}</p>
+            <p>Floor: {flat.floor}</p>
+            <p>Size: {flat.size} sqft</p>
+            <p>{flat.isoccupied ? "Occupied" : "Empty"}</p>
+          </div>
+        ))}
+      </div>
 
-<h1>flats in your society</h1>
-<div>
-{flats.map((flat) => (
-    
-
-<div  onClick={()=>setselectedflat(flat)}>
-
-    <h2>flat {flat.flatnumber}</h2>
-    <p>{flat.block}</p>
-    <p>{flat.floor}</p>
-<p>{flat.size}</p>
-<p>if(flat.isoccupied){
-<P>empty!!</P>
-    }</p>
-</div>
-))}
-
-</div>
-
- {selectedflat &&(
-        <div>
-<ul>
-{selectedflat.Members.map((member , id)=>(
-    <li>
-        <p>{member.name} </p>
-        <p>{member.gender}</p>
-        <p> {member.age}</p>
-        <p>{member.email}</p>
-        <p>{member.phone}</p>
-    </li>
-))}</ul>
-
+      {selectedFlat && (
+        <div style={{ marginTop: "20px" }}>
+          <h2>Members in Flat {selectedFlat.flatnumber}</h2>
+          <ul>
+            {selectedFlat.Members.map((member, id) => (
+              <li key={id} style={{ marginBottom: "10px" }}>
+                <p>Name: {member.name}</p>
+                <p>Gender: {member.gender}</p>
+                <p>Age: {member.age}</p>
+                <p>Email: {member.email}</p>
+                <p>Phone: {member.phone}</p>
+              </li>
+            ))}
+          </ul>
         </div>
-  )}
+      )}
     </div>
-
-   
-  
- )
+  );
 }

@@ -1,39 +1,67 @@
 import { NextResponse } from "next/server";
-import { dbconnect } from "@/app/lib/dbconnect"; // Ensure you have this
-import { SocietyModel } from "@/model/Society";   // Your existing model
+import { dbconnect } from "@/app/lib/dbconnect";
+import { SocietyModel } from "@/model/Society";
+import { ResidentModel } from "@/model/resident";
 import bcrypt from "bcryptjs";
+import mongoose from "mongoose";
 
-// POST: Register Society
 export async function POST(req: Request) {
   await dbconnect();
 
   try {
-    const { name, address, email, password } = await req.json();
+    const {
+      societyName,
+      societyAddress,
+      adminName,
+      adminUsername,
+      adminEmail,
+      adminPassword,
+      adminPhone,
+      adminAge,
+      adminGender,
+      flatnumber,
+    } = await req.json();
 
-    if (!name || !address || !email || !password) {
+    // Validate required fields
+    if (
+      !societyName || !societyAddress
+    ) {
       return NextResponse.json({ message: "All fields are required" }, { status: 400 });
     }
 
-    // Check if admin already exists
-    const existingSociety = await SocietyModel.findOne({ email });
+    // Check for duplicate society
+    const existingSociety = await SocietyModel.findOne({societyName : societyName });
     if (existingSociety) {
-      return NextResponse.json({ message: "Admin already registered" }, { status: 400 });
+      return NextResponse.json({ message: "Society already registered with this email" }, { status: 400 });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-
+    // Hash passwords
+  
+    // Save new society
     const newSociety = new SocietyModel({
-      name,
-      address,
-      email,
-      password: hashedPassword,
+      name: societyName,
+      address: societyAddress
     });
-
     await newSociety.save();
 
-    return NextResponse.json({ message: "Society registered successfully" }, { status: 200 });
+    // // Create admin resident
+    // const newAdmin = new ResidentModel({
+    //   name: adminName,
+    //   username: adminUsername,
+    //   email: adminEmail,
+    //   password: hashedAdminPassword,
+    //   phone: adminPhone,
+    //   age: adminAge,
+    //   gender: adminGender,
+    //   flatnumber: new mongoose.Types.ObjectId(flatnumber),
+    //   society: newSociety._id,
+    //   role: "admin",
+    // });
+    // await newAdmin.save();
+
+    return NextResponse.json({ message: "Society and admin registered successfully" }, { status: 200 });
   } catch (err) {
-    console.error("Error:", err);
+    console.error("Error registering society:", err);
     return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
   }
 }

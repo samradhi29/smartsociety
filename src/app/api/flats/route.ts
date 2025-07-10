@@ -4,7 +4,7 @@ import { flatsModel } from "@/model/flats";
 export async function GET() {
     await dbconnect();
     try{
-const flats = await flatsModel.find().populate("society", "name");
+const flats = await flatsModel.find();
 
 return NextResponse.json({flats});
     }

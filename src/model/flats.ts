@@ -1,47 +1,46 @@
-import mongoose , {Schema , Document , Types} from "mongoose";
-import { Society } from "./Society";
-export interface flats extends Document{
-    flatnumber : string;
-   block : string;
-   floor: number ;
-   type : string;
-   size : Number;
-   isoccupied : boolean;
-     society: Types.ObjectId; 
-}
-const flatsSchema : Schema <flats>= new Schema({
-   flatnumber : {
-        type : String ,
-        required : true,
-       
-    },
-    block :{
-        type : String ,
-        required : true
-    } ,
-    floor : {
-        type : Number , 
-        required : true
-    },
-   type : {
-        type : String , 
-        required : true ,
-//        match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Enter correct email address"]
+import mongoose, { Schema, Document, Types } from "mongoose";
 
-    },
-    size  :{
-        type : String ,
-        required : true
-    }
-    ,
-    isoccupied :{
-        type : Boolean
-    },
-    society: {
-    type: Schema.Types.ObjectId,
+export interface IFlat extends Document {
+  flatnumber: string;
+  block: string;
+  floor: number;
+  type: string;
+  size: number;
+  isoccupied: boolean;
+  society: Types.ObjectId;  // <-- ObjectId for ref
+}
+
+const flatsSchema: Schema<IFlat> = new Schema({
+  flatnumber: {
+    type: String,
+    required: true,
+  },
+  block: {
+    type: String,
+    required: true,
+  },
+  floor: {
+    type: Number,
+    required: true,
+  },
+  type: {
+    type: String,
+    required: true,
+  },
+  size: {
+    type: Number,
+    required: true,
+  },
+  isoccupied: {
+    type: Boolean,
+    default: false,
+  },
+  society: {
+    type: mongoose.Schema.Types.ObjectId, // <-- Use ObjectId here
     ref: "Society",
     required: true,
   },
+});
 
-})
-export const flatsModel = mongoose.models.flats || mongoose.model<flats>("flats", flatsSchema);
+export const flatsModel =
+  mongoose.models.flats || mongoose.model<IFlat>("flats", flatsSchema);

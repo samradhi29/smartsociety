@@ -1,96 +1,102 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation"; // ← Make sure it's from 'next/navigation'
+import { useRouter } from "next/navigation";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 
-export default function Page() {
-  const [societyname, setsocietyname] = useState("");
-  const [address, setaddress] = useState("");
-  const [admin, setadmin] = useState("");
-  const [password, setpassword] = useState("");
-  const router = useRouter(); // ← For programmatic navigation
+export default function RegisterSocietyPage() {
+  const router = useRouter();
 
-  const handlesubmit = async (e: React.FormEvent) => {
-    e.preventDefault(); // prevent form from refreshing the page
+  const [societyName, setSocietyName] = useState("");
+  const [societyAddress, setSocietyAddress] = useState("");
+
+  if (typeof window !== "undefined") {
+    localStorage.setItem("societyid", societyName);
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
     const res = await fetch("/api/society", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: societyname,
-        address: address,
-        email: admin,
-        password: password,
-      }),
+      body: JSON.stringify({ societyName, societyAddress }),
     });
 
+    const data = await res.json();
     if (res.ok) {
-      // ✅ Redirect to frontend /flats page after successful registration
+      alert("Society registered successfully!");
       router.push("/flats");
     } else {
-      const data = await res.json();
-      alert(data.message || "Failed to register society.");
+      alert(data.error || "Failed to register society.");
     }
   };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-purple-900 to-black p-10">
-      <div className="bg-black text-white rounded-xl border border-purple-400 shadow-lg p-8 w-full max-w-md">
-        <h1 className="text-2xl font-extrabold mb-6 text-center text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-purple-500 to-purple-600 shadow-lg">
-          Register Your Society
-        </h1>
-        <form onSubmit={handlesubmit} className="space-y-4 ">
-          <div>
-            <label className="block text-white font-semibold mb-1">Society Name</label>
-            <input onChange={(e)=>setsocietyname(e.target.value)}
-              type="text" 
-              value={societyname}
-              placeholder="Enter society name"
-              className="w-full bg-black text-white border border-purple-400 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 placeholder-gray-400"
-            />
-          </div>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-black to-slate-900 px-4 py-10 gap-30">
+   <h1 className="text-2xl bg-gradient-to-r from-yellow-400 via-pink-400 to-orange-500 bg-clip-text text-transparent">
+ welcome to socitopia!
+<p className="text-sm text-slate-300 mt-2 text-center">
+  Manage your society with ease, transparency, and connection.
+</p>
 
-          <div>
-            <label className="block text-white font-semibold mb-1 ">Location</label>
-            <input
-              type="text" 
-              value={address}
-              onChange={(e)=>setaddress(e.target.value)}
-              placeholder="Enter location"
-              className="w-full bg-black text-white border border-purple-400 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 placeholder-gray-400"
-            />
-          </div>
+ 
+</h1>
 
-          <div>
-            <label className="block text-white font-semibold mb-1">Admin Email</label>
-            <input
-              type="email"
-              value={admin}
-              onChange={(e)=>setadmin(e.target.value)}
-              placeholder="Enter email"
-              className="w-full bg-black text-white border border-purple-400 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 placeholder-gray-400"
-            />
-          </div>
+      <Card className="w-115  max-w-3xl bg-black border border-yellow-100   text-white rounded-4xl ">
+        <CardHeader>
+          <CardTitle className="text-center text-2xl  text-amber-300 font-stretch-ultra-expanded ml-20">
+           <p className="shadow-2xl  w-50 rounde">Register Society</p> 
+          </CardTitle>
+        </CardHeader>
 
-          <div>
-            <label className="block text-white font-semibold mb-1">Password</label>
-            <input
-            value={password}
-            onChange={(e)=>setpassword(e.target.value)}
-              type="password"
-              placeholder="Create password"
-              className="w-full bg-black text-white border border-purple-400 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 placeholder-gray-400"
-            />
-          </div>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              {/* <h2 className="text-xl font-semibold text-slate-200 mb-3">
+                Society Details
+              </h2> */}
 
-          <button
-            type="submit"
-          
-            className="w-full bg-purple-600 text-white font-bold py-2 rounded-xl shadow-md shadow-purple-500/50 hover:bg-purple-500 transition duration-300"
-          >
-            Register
-          </button>
-        </form>
-      </div>
+              <div className="space-y-4">
+                <div>
+                  {/* <Label className="text-white">Society Name</Label> */}
+                  <Input
+                    value={societyName}
+                    onChange={(e) => setSocietyName(e.target.value)}
+                    placeholder="Enter society name"
+                    className="bg-black text-white  shadow-2xl  border border-yellow-1000 placeholder-gray-400 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+
+                <div>
+                  {/* <Label className="text-white">Society Address</Label> */}
+                  <Input
+                    value={societyAddress}
+                    onChange={(e) => setSocietyAddress(e.target.value)}
+                    placeholder="Enter society address"
+                    className="bg-black text-white border border-yellow-100 rounded-b-lg shadow-2xl placeholder-gray-400 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+
+           <div className="flex justify-center">
+  <Button
+    type="submit"
+    className="w-40 text-end  bg-blue-200 text-black font-semibold rounded-xl py-2 transition duration-300 shadow-lg hover:brightness-110"
+  >
+    Register
+  </Button>
+</div>
+
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 }
