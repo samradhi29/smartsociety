@@ -1,3 +1,4 @@
+"use client"
 import { ChartArea } from 'lucide-react';
 import { useParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
