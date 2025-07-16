@@ -12,14 +12,14 @@ export async function generateBills() {
   const year = today.getFullYear();
 
   for (const flat of flatsdata) {
-    const exists = await Bill.findOne({
+    const exists = await BillModel.findOne({
       flatNo: flat.flatNo,
       month,
       year,
     });
 
     if (!exists) {
-      await Bill.create({
+      await BillModel.create({
         flatNo: flat.flatNo,
         userEmail: flat.userEmail,   // from flat data
         amount: 1500,                // or any logic to calculate amount
