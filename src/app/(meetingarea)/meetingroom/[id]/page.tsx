@@ -1,48 +1,47 @@
 "use client"
 import { ChartArea } from 'lucide-react';
-import { useParams } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import { useParams } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
 
-export default function page() {
-    const {id} = useParams();
-    const [meetingdetails , setmeetingdetails] = useState<any>([])
-    
-    const fetchdata = async() =>{
-        const data = await fetch('/api/meetingdetails/${id}');
-        setmeetingdetails(data);
+export default function Page() {
+  const { id } = useParams();
+  const [meetingdetails, setMeetingDetails] = useState<any>(null);
+
+  const fetchData = async () => {
+    // Use backticks for template literal
+    const res = await fetch(`/api/meetingdetails/${id}`);
+    const data = await res.json(); // Parse JSON response
+    setMeetingDetails(data);
+  };
+
+  useEffect(() => {
+    if (id) {
+      fetchData();
     }
+  }, [id]);
 
-    useEffect(()=>{
-fetchdata();
-    } ,[]);
+  if (!meetingdetails) return <div>Loading...</div>;
 
   return (
-
-
-
     <div>
-
-    {/* metting deetails */}
-<div>
-   
-        
+      {/* meeting details */}
+      <div>
         <div key={meetingdetails.id}>
-            <h1>{meetingdetails.purpose}</h1>
-            <p>stated At: {meetingdetails.startTime}</p>
+          <h1>{meetingdetails.purpose}</h1>
+          <p>Started At: {meetingdetails.startTime}</p>
         </div>
-    
-</div>
+      </div>
 
-{meetingdetails.usersdata?.map((user) => (
-  <div key={user._id}>
-    <h3>{user.name}</h3>
-    <p>joined at: {user.joinedAt}</p>
-  </div>
-))}
+      {meetingdetails.usersdata?.map((user: any) => (
+        <div key={user._id}>
+          <h3>{user.name}</h3>
+          <p>Joined at: {user.joinedAt}</p>
+        </div>
+      ))}
 
-<ChartArea/>
-<br />
-<button>end</button>
+      <ChartArea />
+      <br />
+      <button>end</button>
     </div>
-  )
+  );
 }
