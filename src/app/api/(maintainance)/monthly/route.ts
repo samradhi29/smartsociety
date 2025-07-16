@@ -1,6 +1,6 @@
 // src/app/api/cron/monthly/route.ts
 import { NextResponse } from "next/server";
-import generateBills from '@/app/api/(maintainance)/monthly' // adjust path accordingly
+import {generateBills} from '@/app/api/(maintainance)/genratebills/route' // adjust path accordingly
 
 export async function GET() {
   try {
