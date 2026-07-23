@@ -1,0 +1,9 @@
+replicaCount: 1
+image:
+  repository: samradhi/smartsociety-socket
+  tag: v4
+  pullPolicy: Always
+service:
+  type: LoadBalancer
+  port: <port1>
+  targetPort: <targetPort>

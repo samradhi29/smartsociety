@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: socket-config
+  namespace: smartsociety
+data:
+  NEXTJS_SERVER: "http://34.47.222.168"
+  PORT: "3001"

@@ -1,0 +1,9 @@
+replicaCount: 2
+image:
+  repository: samradhi/smartsociety-nextjs
+  tag: vNEW
+  pullPolicy: Always
+service:
+  type: ClusterIP
+  port: <port>
+  targetPort: <targetPort>

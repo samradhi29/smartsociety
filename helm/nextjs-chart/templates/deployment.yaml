@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nextjs
+  namespace: smartsociety
+  labels:
+    app: nextjs-server
+spec:
+  replicas: {{ .Values.replicaCount}}
+  selector:
+    matchLabels:
+      app: nextjs-server
+  template:
+    metadata:
+      labels:
+        app: nextjs-server
+    spec:
+      containers:
+      - name: nextjs
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.imagePullPolicy}}
+        ports:
+        - containerPort: {{ .Values.service.targetPort}}
+        envFrom:
+        - configMapRef:
+             name: nextjs-config
+        - secretRef:
+             name: nextjs-secret

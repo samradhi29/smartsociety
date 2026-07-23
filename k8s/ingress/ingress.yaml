@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: smartsociety-ingress
+  namespace: smartsociety
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: smartsociety.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nextjs-service
+                port:
+                  number: 80
+
+          - path: /socket
+            pathType: Prefix
+            backend:
+              service:
+                name: socket-service
+                port:
+                  number: 3000

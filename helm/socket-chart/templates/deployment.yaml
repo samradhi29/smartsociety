@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: socket
+  namespace: smartsociety
+  labels:
+    app: socket-server
+spec:
+  replicas: {{ .Values.replicaCount}}
+  selector:
+    matchLabels:
+      app: socket-server
+  template:
+    metadata:
+      labels:
+        app: socket-server
+    spec:
+      containers:
+      - name: socket
+        image: "{{ .Values.image.repository}}:{{ .Values.image.tag}}"
+        imagePullPolicy: {{ .Values.image.imagePullPolicy}}
+        ports:
+        - containerPort: {{ .Values.service.targetPort}}
+        envFrom:
+        - configMapRef:
+             name: socket-config
+        - secretRef:
+             name: socket-secret

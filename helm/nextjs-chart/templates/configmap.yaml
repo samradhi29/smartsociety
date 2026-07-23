@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nextjs-config
+  namespace: smartsociety
+data:
+  NEXT_PUBLIC_URL: http://34.47.222.168
+  NEXTAUTH_URL: http://34.47.222.168
+  NEXT_PUBLIC_SOCKET_SERVER: http://34.100.172.26:3000
+  CLOUD_NAME: dpocor2et 
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: pk_test_51SOeF81MXiwovUlUPOFmKgXf6tiz1AoYP74V2tZaBZ7fCJIIakCGeXnEZIWWAeRh1cpxzImUo9JZJXgLfag0Xtnq00niiT0kAL
